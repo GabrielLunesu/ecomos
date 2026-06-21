@@ -1,0 +1,397 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+  Ecom-OS design tokens.
+  Dark-first, neutral OKLCH foundation with a centralized semantic status system.
+  Semantic status colors (success/warning/critical/info/agent/...) are exposed as
+  CSS variables so that no page or component hard-codes status colors inline.
+*/
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
+
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* Semantic status palette — each has a fill, foreground, and subtle surface. */
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-success-surface: var(--success-surface);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning-surface: var(--warning-surface);
+  --color-critical: var(--critical);
+  --color-critical-foreground: var(--critical-foreground);
+  --color-critical-surface: var(--critical-surface);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-info-surface: var(--info-surface);
+  --color-agent: var(--agent);
+  --color-agent-foreground: var(--agent-foreground);
+  --color-agent-surface: var(--agent-surface);
+  --color-accent-pink: var(--accent-pink);
+  --color-accent-pink-foreground: var(--accent-pink-foreground);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.625rem;
+
+  --motion-duration-instant: 80ms;
+  --motion-duration-fast: 120ms;
+  --motion-duration-overlay: 180ms;
+  --motion-duration-panel: 240ms;
+  --motion-duration-page: 260ms;
+  --motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --motion-ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --motion-press-scale: 0.96;
+
+  /* Light theme — full parity with dark. */
+  --background: oklch(0.985 0 0);
+  --foreground: oklch(0.17 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.17 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.17 0 0);
+  --primary: oklch(0.21 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.96 0 0);
+  --secondary-foreground: oklch(0.21 0 0);
+  --muted: oklch(0.96 0 0);
+  --muted-foreground: oklch(0.52 0 0);
+  --accent: oklch(0.96 0 0);
+  --accent-foreground: oklch(0.21 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.915 0 0);
+  --input: oklch(0.915 0 0);
+  --ring: oklch(0.62 0 0);
+
+  /* Chart series — semantic, neutral-anchored, colorblind-considerate. */
+  --chart-1: oklch(0.55 0.16 250);   /* revenue / primary */
+  --chart-2: oklch(0.62 0.15 162);   /* margin / positive */
+  --chart-3: oklch(0.68 0.16 55);    /* spend / warm */
+  --chart-4: oklch(0.55 0.2 300);    /* agent / intelligence */
+  --chart-5: oklch(0.62 0.12 220);   /* secondary metric */
+  --chart-6: oklch(0.55 0.05 30);    /* COGS / neutral-warm */
+
+  /* Semantic status — light.
+     `*-foreground` is the TEXT color for the soft `*-surface` chips: a dark,
+     saturated shade so it stays legible on the pale tint. */
+  --success: oklch(0.56 0.13 155);
+  --success-foreground: oklch(0.43 0.12 155);
+  --success-surface: oklch(0.95 0.04 155);
+  --warning: oklch(0.7 0.15 75);
+  --warning-foreground: oklch(0.44 0.11 70);
+  --warning-surface: oklch(0.95 0.05 85);
+  --critical: oklch(0.58 0.22 25);
+  --critical-foreground: oklch(0.48 0.2 25);
+  --critical-surface: oklch(0.95 0.04 25);
+  --info: oklch(0.55 0.14 240);
+  --info-foreground: oklch(0.46 0.14 245);
+  --info-surface: oklch(0.95 0.04 240);
+  --agent: oklch(0.53 0.2 300);
+  --agent-foreground: oklch(0.46 0.18 300);
+  --agent-surface: oklch(0.95 0.04 300);
+  --accent-pink: oklch(0.62 0.2 350);
+  --accent-pink-foreground: oklch(0.48 0.19 350);
+
+  --sidebar: oklch(0.975 0 0);
+  --sidebar-foreground: oklch(0.17 0 0);
+  --sidebar-primary: oklch(0.21 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.94 0 0);
+  --sidebar-accent-foreground: oklch(0.21 0 0);
+  --sidebar-border: oklch(0.91 0 0);
+  --sidebar-ring: oklch(0.62 0 0);
+}
+
+.dark {
+  /* Dark theme — reference aesthetic. */
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.195 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.255 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.255 0 0);
+  --muted-foreground: oklch(0.715 0 0);
+  --accent: oklch(0.265 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 9%);
+  --input: oklch(1 0 0 / 14%);
+  --ring: oklch(0.556 0 0);
+
+  --chart-1: oklch(0.62 0.17 250);
+  --chart-2: oklch(0.7 0.16 162);
+  --chart-3: oklch(0.75 0.16 65);
+  --chart-4: oklch(0.66 0.22 300);
+  --chart-5: oklch(0.68 0.12 220);
+  --chart-6: oklch(0.65 0.06 40);
+
+  /* Dark: soft chip text is a LIGHT, saturated shade on the dark surface. */
+  --success: oklch(0.7 0.15 158);
+  --success-foreground: oklch(0.85 0.13 158);
+  --success-surface: oklch(0.28 0.05 158);
+  --warning: oklch(0.8 0.15 80);
+  --warning-foreground: oklch(0.87 0.12 85);
+  --warning-surface: oklch(0.3 0.06 80);
+  --critical: oklch(0.66 0.2 22);
+  --critical-foreground: oklch(0.84 0.12 22);
+  --critical-surface: oklch(0.3 0.08 22);
+  --info: oklch(0.68 0.14 240);
+  --info-foreground: oklch(0.84 0.11 240);
+  --info-surface: oklch(0.29 0.06 240);
+  --agent: oklch(0.68 0.2 300);
+  --agent-foreground: oklch(0.85 0.13 300);
+  --agent-surface: oklch(0.3 0.07 300);
+  --accent-pink: oklch(0.7 0.18 350);
+  --accent-pink-foreground: oklch(0.85 0.13 350);
+
+  --sidebar: oklch(0.175 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.62 0.17 250);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.255 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 9%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Tabular figures for all financial/operational numeric surfaces. */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer utilities {
+  /* Used by data tables and metric values for aligned digits. */
+  .nums {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+}
+
+main[data-slot="workspace-page"] {
+  view-transition-name: workspace-page;
+}
+
+::view-transition-old(workspace-page),
+::view-transition-new(workspace-page) {
+  animation-duration: var(--motion-duration-page);
+  animation-timing-function: var(--motion-ease-standard);
+  mix-blend-mode: normal;
+  overflow: clip;
+}
+
+::view-transition-old(workspace-page) {
+  animation-name: ecomos-page-exit;
+}
+
+::view-transition-new(workspace-page) {
+  animation-name: ecomos-page-enter;
+}
+
+[data-slot="dropdown-menu-content"],
+[data-slot="dropdown-menu-sub-content"],
+[data-slot="popover-content"],
+[data-slot="select-content"],
+[data-slot="tooltip-content"] {
+  animation-duration: var(--motion-duration-overlay);
+  animation-timing-function: var(--motion-ease-enter);
+  will-change: transform, opacity;
+}
+
+[data-slot="dropdown-menu-content"][data-state="closed"],
+[data-slot="dropdown-menu-sub-content"][data-state="closed"],
+[data-slot="popover-content"][data-state="closed"],
+[data-slot="select-content"][data-state="closed"],
+[data-slot="tooltip-content"][data-state="closed"] {
+  animation-timing-function: var(--motion-ease-exit);
+}
+
+[data-slot="dialog-overlay"],
+[data-slot="sheet-overlay"],
+[data-slot="alert-dialog-overlay"],
+[data-slot="drawer-overlay"] {
+  animation-duration: var(--motion-duration-overlay);
+  animation-timing-function: var(--motion-ease-standard);
+  will-change: opacity;
+}
+
+[data-slot="dialog-content"],
+[data-slot="alert-dialog-content"],
+[data-slot="sheet-content"],
+[data-slot="drawer-content"],
+[data-sidebar="sidebar"][data-mobile="true"] {
+  animation-duration: var(--motion-duration-panel);
+  animation-timing-function: var(--motion-ease-enter);
+  will-change: transform, opacity;
+}
+
+[data-slot="dialog-content"][data-state="closed"],
+[data-slot="alert-dialog-content"][data-state="closed"],
+[data-slot="sheet-content"][data-state="closed"],
+[data-slot="drawer-content"][data-state="closed"],
+[data-sidebar="sidebar"][data-mobile="true"][data-state="closed"] {
+  animation-duration: var(--motion-duration-overlay);
+  animation-timing-function: var(--motion-ease-exit);
+}
+
+[data-slot="collapsible-content"][data-state="open"] {
+  animation: ecomos-collapsible-down var(--motion-duration-panel) var(--motion-ease-enter);
+}
+
+[data-slot="collapsible-content"][data-state="closed"] {
+  animation: ecomos-collapsible-up var(--motion-duration-overlay) var(--motion-ease-exit);
+}
+
+[data-sidebar="menu-button"],
+[data-sidebar="menu-sub-button"],
+[data-sidebar="menu-action"],
+[data-slot="dropdown-menu-trigger"],
+[data-slot="popover-trigger"] {
+  transition-duration: var(--motion-duration-fast);
+  transition-property: scale, background-color, color, opacity;
+  transition-timing-function: var(--motion-ease-standard);
+}
+
+[data-sidebar="menu-button"]:active,
+[data-sidebar="menu-sub-button"]:active,
+[data-sidebar="menu-action"]:active,
+[data-slot="dropdown-menu-trigger"]:active,
+[data-slot="popover-trigger"]:active {
+  scale: var(--motion-press-scale);
+}
+
+@keyframes ecomos-page-enter {
+  from {
+    opacity: 0.86;
+    transform: translateY(8px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes ecomos-page-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+  to {
+    opacity: 0.9;
+    transform: translateY(-4px);
+    filter: blur(2px);
+  }
+}
+
+@keyframes ecomos-collapsible-down {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--radix-collapsible-content-height);
+    opacity: 1;
+  }
+}
+
+@keyframes ecomos-collapsible-up {
+  from {
+    height: var(--radix-collapsible-content-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:not(.motion-full) *,
+  html:not(.motion-full) *::before,
+  html:not(.motion-full) *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  html:not(.motion-full) main[data-slot="workspace-page"] {
+    view-transition-name: none;
+  }
+
+  html:not(.motion-full)::view-transition-old(workspace-page),
+  html:not(.motion-full)::view-transition-new(workspace-page) {
+    animation: none !important;
+  }
+
+  html:not(.motion-full) [data-sidebar="menu-button"]:active,
+  html:not(.motion-full) [data-sidebar="menu-sub-button"]:active,
+  html:not(.motion-full) [data-sidebar="menu-action"]:active,
+  html:not(.motion-full) [data-slot="dropdown-menu-trigger"]:active,
+  html:not(.motion-full) [data-slot="popover-trigger"]:active {
+    scale: 1;
+  }
+}
