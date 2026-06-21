@@ -1,0 +1,142 @@
+[
+  {
+    "path": "README-FIRST.md",
+    "bytes": 1994,
+    "sha256": "5103cdbca348c004a34987db1404c3575cf986fba1e653c8c1d59cda4d8a879e"
+  },
+  {
+    "path": "repo-overlay/AGENTS.md",
+    "bytes": 5458,
+    "sha256": "24f9d9c82b9a6414d763cae84f8ad25f84b2e333463e28bcc65ab471303c50ac"
+  },
+  {
+    "path": "repo-overlay/agent-prompts/CODEX-PRODUCTION-LEAD.md",
+    "bytes": 7100,
+    "sha256": "a462aff20f6765f77d74d3e57325d85fdd7f606d3cb79b672bc0477b97508c90"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/00-PRODUCT-VISION.md",
+    "bytes": 3538,
+    "sha256": "0118f2e97cc77d0daff3a9f5a6c38b1e89783b27a70d61cf1d5f8c75ddc7f04a"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/01-SYSTEM-ARCHITECTURE.md",
+    "bytes": 6869,
+    "sha256": "8c18090eff088824c00e8afd4252b55c3f41b9261ad4f2e9b91d8b50c47cd5a0"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/02-TECHNICAL-DECISIONS.md",
+    "bytes": 5040,
+    "sha256": "66d3498243b4f3a636071b72ab07813592a0d74fb4d2f209ef5b7b39bb1aad8a"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/03-ENGINEERING-STANDARDS.md",
+    "bytes": 3881,
+    "sha256": "5ccd6181c14d02d0dec94a1a40424edee369646a27aa2c8118ff0e4678f0b04c"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/04-IDENTITY-AND-RBAC.md",
+    "bytes": 4324,
+    "sha256": "51e05de9467641b99a28f527baf759d5d0807610be95304f52c697523cfa8509"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/05-DATA-AND-TRACEABILITY.md",
+    "bytes": 5368,
+    "sha256": "319a84868450dcd466857784497d62112c44c00cdb44db7c472b61f5788d8a64"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/06-OPENCLAW-RUNTIME.md",
+    "bytes": 5720,
+    "sha256": "ee705de8d776cec66eada3293ef57e1819423b0dcb07e7e0d6d725a79bbe0a3f"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/07-WORKFLOWS-ACTIONS-APPROVALS.md",
+    "bytes": 4144,
+    "sha256": "6f3bb102da6c38fd71f2ff35c8e9501cab6b365428379d19cd2932092d51cb5e"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/08-CONNECTORS.md",
+    "bytes": 4558,
+    "sha256": "b7d645454c078482e3baa263f6efbf3afcdcb7eb4374c237cb62e139f5ae00f4"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/09-SECURITY-AND-SECRETS.md",
+    "bytes": 4356,
+    "sha256": "15c26029d9e03d20153e2ec3a4205164056194fbbfa085f9855e64cbe583f6bf"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/10-TESTING-AND-E2E.md",
+    "bytes": 4691,
+    "sha256": "d9d3ae7690b93f28fa8c8dd8e00aea5bf84e0af6d3206701362b47a056c7b8e4"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/11-OPERATIONS-AND-RECOVERY.md",
+    "bytes": 3963,
+    "sha256": "313c79c3164bc1cfb7b0fd59ec840d0fea50e9077c8d9a2dc08c0f7d73a10007"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/12-DOMAIN-MODULES.md",
+    "bytes": 3479,
+    "sha256": "049e083a7a990ffdec4d341ce84f19580956a3a68e4b141d5da71804e465f212"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/ECOMOS-BUILD-SPEC.md",
+    "bytes": 7234,
+    "sha256": "090993a96ab9c41570a343640f563ef643282ec428cea6fd1b1a35acd2f024f3"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/LOCAL-INTEGRATION-RUNBOOK.md",
+    "bytes": 3263,
+    "sha256": "964ff3354551509416ab300e175069a217fa279aaf6dda61ece30f40ba6fad14"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/README.md",
+    "bytes": 2187,
+    "sha256": "73cb711175abde269744c945eb2915b214be54837e912ffd285bfdc033bdaf70"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/REFERENCE-REUSE-POLICY.md",
+    "bytes": 1403,
+    "sha256": "f11b1f20be468ba6e6da00e8f9663f352ecee6d0a1a8a489c34bdb7d74bd0501"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/SOURCES.md",
+    "bytes": 1567,
+    "sha256": "639614a6376c7a3770cb4bd267d29b490667c93044cf4ffd073d5b46b2a45e5a"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/TEST-ACCOUNT-RUNBOOK.md",
+    "bytes": 3048,
+    "sha256": "4e8a718ddaf31ffed48cea2d61ce92b4251013ca187eb65918b4002fd86406b8"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/living/BLOCKERS.md",
+    "bytes": 389,
+    "sha256": "ec0184370f9b35fbc4894dd45d9faee28da7616b278291757137f57ac9be25d9"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/living/BUILD-STATUS.md",
+    "bytes": 1071,
+    "sha256": "c2e33d9c823ffa9fc29aa92d2336aef1aebf122a0ee49c1f94f0f346cdc873e5"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/living/DECISIONS.md",
+    "bytes": 592,
+    "sha256": "06bd57314260bde601fec9e178ba90c5d80ef02aa4dd5d824ec1476442f68a8c"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/living/INTEGRATION-STATE.md",
+    "bytes": 790,
+    "sha256": "38d6467dc840c038be4a2aecf89c71a363063dca040e9bec65b16a98d78baee0"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/living/RISK-REGISTER.md",
+    "bytes": 1169,
+    "sha256": "171d433d11a5552fae5a0582e290cd77ddfe0d16f6ed0d0fb184dec5e1350ce7"
+  },
+  {
+    "path": "repo-overlay/docs/ecomos/living/TEST-EVIDENCE.md",
+    "bytes": 588,
+    "sha256": "5869eb4358bee118443d32b12bb75b4a197c7e298d3b6396b6c170c53aa7780b"
+  }
+]
