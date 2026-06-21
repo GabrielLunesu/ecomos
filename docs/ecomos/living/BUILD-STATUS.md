@@ -2,7 +2,7 @@
 
 ## Current phase
 
-`Phase 1 — Real local OpenClaw and connector smoke environment` is blocked after Phase 0 completion, partial Phase 1A smoke, successful Docker/Compose host setup, and Composio read-only connector verification.
+`Phase 1 — Real local OpenClaw and connector smoke environment` is blocked after Phase 0 completion, partial Phase 1A smoke, successful Docker/Compose host setup, Composio connector verification, and bounded write cleanup.
 
 ## Product baseline
 
@@ -43,7 +43,9 @@ Phase 1A/1B prerequisite gate.
 - Postgres 16.14 is installed and smoke-tested on an alternate local port.
 - Docker/Compose host prerequisites are resolved with Colima.
 - Composio OAuth/read-only connector verification passed for Outlook, Shopify, and Google Ads.
-- Connector write/send E2E remains blocked by live-account risk: Shopify is not classified as a partner development shop and Google Ads returned an enabled non-test customer row.
+- Owner authorized bounded connector test writes against the current Composio-connected resources.
+- Bounded write cleanup passed for Outlook, Shopify, and Google Ads reversible update/restore.
+- Exact Google Ads create/remove campaign gate remains blocked by missing campaign-budget tooling or explicit shared budget.
 - Full OpenClaw conformance remains blocked by safe non-production model/runtime approval and the MCP harness requirement.
 
 ## Done
@@ -66,7 +68,12 @@ Phase 1A/1B prerequisite gate.
 - Verified Composio Connected Accounts API returned active OAuth accounts for Outlook, Shopify, and Google Ads.
 - Ran read-only Composio tools successfully: Outlook profile, Shopify paginated product read, and Google Ads accessible customers.
 - Ran read-only environment classification: Shopify returned `partnerDevelopment: false`; Google Ads returned an `ENABLED` customer row that was not marked as a test account.
+- After owner authorization, ran bounded write smoke:
+  - Outlook self-send, sent-copy deletion, delayed inbox-copy deletion, final Deleted Items sweep empty.
+  - Shopify draft product create, verify, delete, and post-delete `Not Found` confirmation.
+  - Google Ads campaign name update/restore on the existing campaign, with validate-only first and final status still `ENABLED`.
+- Attempted stricter Google Ads paused-campaign create/remove validation; blocked before mutation by Composio/Google Ads budget constraints.
 
 ## Next
 
-Owner action is required before the next Phase 1 gate can honestly pass: reconnect/confirm safe dedicated connector test resources for write E2E and provide safe non-production OpenClaw model/runtime approval. See `BLOCKERS.md`.
+Owner action is required before the next Phase 1 gate can honestly pass: provide a Google Ads explicit shared test budget or authorize a first-party budget mutation path, and provide safe non-production OpenClaw model/runtime approval. See `BLOCKERS.md`.

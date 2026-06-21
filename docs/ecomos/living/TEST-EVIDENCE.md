@@ -135,6 +135,42 @@ Record evidence by phase and commit. Do not write “passed” without the exact
   - No Outlook send/reply, Shopify create/update, or Google Ads mutate call was attempted
 - Gate verdict: OAuth/read-only connector auth is verified; Phase 1B write/send E2E remains blocked by live-account risk and missing explicit dedicated-test-resource confirmation.
 
+## Phase 1B / Composio bounded write and cleanup verification
+
+- Commit: recorded before commit creation on `build/production-ecomos`; final response records the resulting commit hash
+- Authorization:
+  - Owner confirmed the current Composio-connected Outlook, Shopify, and Google Ads resources are safe for bounded test writes with cleanup.
+  - `COMPOSIO_API_KEY` value remained local only and was not printed or committed.
+- Outlook:
+  - Run marker: `ecomos-bounded-20260621184914`
+  - `OUTLOOK_SEND_EMAIL`: HTTP `200`, `successful: true`, self-addressed test email sent.
+  - Initial cleanup found and deleted the sent-items copy.
+  - Final delayed-delivery sweep found and deleted one inbox copy.
+  - Final Deleted Items sweep found `0` matching messages.
+  - Cleanup verdict: pass.
+- Shopify:
+  - Run marker: `ecomos-bounded-20260621184914`
+  - `SHOPIFY_CREATES_A_NEW_PRODUCT`: HTTP `200`, `successful: true`; created a draft product with a unique `ECOMOS TEST DELETE ME` title.
+  - `SHOPIFY_GET_PRODUCT`: HTTP `200`, `successful: true`; product was fetchable before cleanup.
+  - `SHOPIFY_DELETE_PRODUCT`: HTTP `200`, `successful: true`.
+  - Post-delete `SHOPIFY_GET_PRODUCT`: HTTP `200`, `successful: false`, provider result `Not Found`.
+  - Cleanup verdict: pass.
+- Google Ads:
+  - Reversible update marker: `ecomos-ga-20260621185023`
+  - `GOOGLEADS_SEARCH_STREAM_GAQL`: HTTP `200`, `successful: true`; selected one non-removed campaign.
+  - `GOOGLEADS_MUTATE_CAMPAIGNS` validate-only update: HTTP `200`, `successful: true`.
+  - `GOOGLEADS_MUTATE_CAMPAIGNS` update: HTTP `200`, `successful: true`; temporarily appended a unique marker to the campaign name.
+  - Follow-up GAQL verified the marker was present.
+  - `GOOGLEADS_MUTATE_CAMPAIGNS` restore: HTTP `200`, `successful: true`; restored the exact original campaign name.
+  - Follow-up GAQL verified the original name was restored and campaign status remained `ENABLED`.
+  - Cleanup verdict: pass.
+- Google Ads exact create/remove probe:
+  - Initial validate-only create using `daily_budget` failed before mutation because the Composio tool produced an unsupported `dailyBudget` field.
+  - Existing campaign budget was discovered, but validate-only create using that budget failed with `CANNOT_USE_IMPLICITLY_SHARED_CAMPAIGN_BUDGET_WITH_MULTIPLE_CAMPAIGNS`.
+  - Composio Google Ads tool search for `campaign budget`, `budget`, and `mutate budget` returned zero campaign-budget tools.
+  - No campaign create mutation was executed after failed validation.
+- Gate verdict: bounded write cleanup passed for Outlook, Shopify, and Google Ads reversible update/restore. Exact Google Ads campaign create/remove remains blocked by BLOCK-004.
+
 ## Phase evidence template
 
 ### Phase X / slice

@@ -43,31 +43,35 @@ Metadata only. Never place credentials or refresh tokens here.
 
 ## Shopify
 
-- Environment: required `test` development store; current connected account is not proven safe for writes
+- Environment: owner-authorized bounded test writes against current connected shop
 - Account/store ID: redacted in docs
 - Composio connected account: active OAuth2 account present; ID and secret values omitted from docs
 - Read-only smoke: `SHOPIFY_GET_PRODUCTS_PAGINATED` returned one product page and pagination metadata
 - Classification: Shopify GraphQL shop classification returned `partnerDevelopment: false`
-- Connected: read-only OAuth verified
-- Last health/E2E: write round trip blocked until a development store is connected or current shop is explicitly authorized for bounded test writes
+- Write smoke: draft test product was created, fetched, deleted, and confirmed absent with post-delete `Not Found`
+- Connected: OAuth and bounded write verified
+- Last health/E2E: bounded create/delete smoke passed; broader Shopify vertical slice still pending first-party adapter and pipeline implementation
 
 ## Microsoft Outlook
 
-- Environment: required test tenant/mailbox; dedicated mailbox classification still requires owner confirmation
+- Environment: owner-authorized bounded test writes against current connected mailbox
 - Tenant/mailbox ID: redacted in docs
 - Delegated scopes: expected Mail.ReadWrite + Mail.Send + offline_access
 - Composio connected account: active OAuth2 account present; ID and secret values omitted from docs
 - Read-only smoke: `OUTLOOK_GET_PROFILE` returned profile-shaped Microsoft Graph data
-- Connected: read-only OAuth verified
-- Last health/E2E: send/reply round trip blocked until owner confirms the mailbox and recipient are dedicated test resources
+- Write smoke: self-addressed email send passed; sent copy and delayed inbox copy were deleted; final Deleted Items sweep found no matching message
+- Connected: OAuth and bounded send/delete verified
+- Last health/E2E: bounded send cleanup passed; full CS reply journey still pending first-party ticket/action pipeline
 
 ## Google Ads
 
-- Environment: required test manager/client hierarchy; current connected account is not proven safe for mutations
+- Environment: owner-authorized bounded test writes against current connected customer
 - Customer IDs: redacted in docs
 - Composio connected account: active OAuth2 account present; ID and secret values omitted from docs
 - Read-only smoke: `GOOGLEADS_LIST_ACCESSIBLE_CUSTOMERS` returned five accessible customer resource names
 - Classification: GAQL classification returned one `ENABLED` customer row with `customer.test_account` not true
-- Connected: read-only OAuth verified
+- Write smoke: validate-only campaign name update passed; campaign name was temporarily marked and restored; final status remained `ENABLED`
+- Exact create gate: validate-only paused campaign create failed before mutation because the Composio tool lacks a usable campaign-budget creation/reuse path for the current account
+- Connected: OAuth and bounded update/restore verified
 - Serving metrics available: not relied on
-- Last health/E2E: create/update/pause round trip blocked until a test hierarchy is connected or current customer is explicitly authorized for bounded test mutations
+- Last health/E2E: query and reversible update/restore passed; create/remove remains blocked by BLOCK-004

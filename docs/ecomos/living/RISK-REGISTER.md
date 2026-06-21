@@ -6,10 +6,11 @@
 | Agent action duplicates | Medium | Critical | Action ledger, idempotency, reconciliation | Not implemented |
 | OAuth token loss/leak | Medium | Critical | Encryption, write-only APIs, rotation, redaction | Not implemented |
 | UI/backend contract drift | Medium | High | Shared schemas + vertical slices | UI contract exists |
-| Test environment accidentally live | High | Critical | Environment classification + hard write block | Composio OAuth/read-only calls passed, but Shopify classification returned `partnerDevelopment: false` and Google Ads returned an `ENABLED` non-test customer row; no writes were attempted |
+| Test environment accidentally live | Medium | Critical | Environment classification + hard write block | Owner authorized bounded writes; Outlook/Shopify cleanup passed and Google Ads reversible update was restored. Continue to avoid unbounded sends, creates, spend, or serving-impacting mutations |
 | Local machine resource exhaustion | Medium | High | One lead, max 3 subagents, staged checks; keep Colima bounded and stop it when idle | Host has 8 GB RAM, Apple M1; after owner-side disk cleanup and Colima start, `df -h /` reports ~21 GiB free; Colima configured with 2 CPUs, 4 GiB memory, 20 GiB disk |
 | Incomplete backup (DB without OpenClaw) | Medium | High | Unified backup/restore drill | Spec defined |
 | Prompt injection reaches broad tools | Medium | Critical | Private MCP, narrow grants, deterministic action pipeline | Not implemented |
 | Financial values misleading | Medium | High | Versioned contribution-margin formula + data quality | UI fixture baseline exists |
 | Missing local Docker/Compose | Low | High | Use Homebrew Docker CLI + Compose plugin + Colima context for local platform topology | Resolved: Docker CLI 29.6.0, Compose 5.1.4, Colima 0.10.3 running; `docker run --rm hello-world` passed |
 | Runtime conformance incomplete | Medium | High | Run conformance with dedicated model/provider credentials and no live/billable account ambiguity | Gateway health passed, but agent run/wait/stream/abort and MCP smoke were not run |
+| Google Ads exact create gate lacks budget path | Medium | High | Use explicit shared test budget or first-party campaign-budget mutation path | Reversible update/restore passed; validate-only campaign create failed because current budget is implicitly shared and Composio exposes no campaign-budget tool |
