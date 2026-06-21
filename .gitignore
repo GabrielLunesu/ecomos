@@ -1,0 +1,16 @@
+.DS_Store
+
+# Local dependency/build output
+node_modules/
+.next/
+dist/
+coverage/
+
+# EcomOS local runtime and evidence state
+.runtime/
+.omo/
+
+# Local secrets and environment
+.env
+.env.*
+!.env.example
