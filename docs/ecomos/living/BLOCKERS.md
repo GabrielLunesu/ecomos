@@ -1,6 +1,6 @@
 # Blockers
 
-### BLOCK-001 — Host prerequisites block Docker/Postgres and full local platform gate
+### BLOCK-001 — Host prerequisites block Docker/Compose and full local platform gate
 
 - **Phase/slice:** Phase 1A/2 local runtime and platform skeleton
 - **Detected at:** 2026-06-21 during Phase 0/1 inventory
@@ -8,15 +8,18 @@
 - **Evidence:**
   - `docker --version`: `command not found`
   - `docker compose version`: `command not found`
-  - `df -h .`: workspace volume ~`99%` used, ~`3.3GiB` free after OpenClaw smoke
+  - `df -h .`: workspace volume still ~`98%` used, ~`4.4GiB` free after cache cleanup and Postgres 16 install
+  - Rebuildable ignored caches removed: `ecomos-ui/.next`, `references/dashboard-inspo/node_modules`
+  - `postgresql@16` installed: `/opt/homebrew/opt/postgresql@16/bin/psql --version` -> `psql (PostgreSQL) 16.14 (Homebrew)`
+  - Bounded Postgres 16 smoke: `/opt/homebrew/opt/postgresql@16/bin/psql -h 127.0.0.1 -p 55432 -d postgres -Atc 'select version();'` returned `PostgreSQL 16.14`; temporary server stopped and port `55432` is free
   - Host: macOS `15.3.1`, Apple M1, 8 GB RAM
-- **Why work cannot safely continue:** Phase 2 requires Postgres 16 and a Docker development topology. With Docker unavailable and very low free disk, installing/running Postgres containers and additional build images would be unreliable and may damage the development environment.
+- **Why work cannot safely continue:** Phase 2 requires a Docker development topology and enough disk to run images/services reliably. Postgres 16 is now available locally, but Docker/Compose are still unavailable and free disk remains below the safe threshold for a VM/container stack.
 - **Options considered:**
-  - Continue without Docker/Postgres: rejected because migration and restart tests would be fake.
-  - Install Docker now: rejected because Docker is absent and available disk is too low for a safe install/image pull.
-  - Use an already running external Postgres: acceptable only if explicitly provided as a dedicated local/test database.
-- **Recommended option:** Free at least 10-15 GiB, install Docker Desktop/CLI with Compose, or provide a dedicated local Postgres 16 connection string for development only.
-- **Exact owner action/value required:** Confirm Docker is installed and available on PATH, or provide a safe local/test Postgres 16 URL through an uncommitted environment mechanism.
+  - Continue without Docker/Compose: rejected because topology/restart tests would be fake.
+  - Install Docker/Colima now: rejected because Docker is absent and available disk is too low for a safe VM/image setup.
+  - Use local Postgres 16 only: accepted as partial prerequisite progress, but not sufficient for the documented Docker topology gate.
+- **Recommended option:** Free at least 10-15 GiB and install Docker Desktop/CLI with Compose or an approved Colima/Docker CLI stack.
+- **Exact owner action/value required:** Confirm Docker is installed and available on PATH, or approve/provide a safe container-runtime setup after freeing disk.
 - **Resume command/step:** Re-run `docker --version`, `docker compose version`, then continue Phase 2 platform topology setup.
 - **Secrets note:** do not paste a database password into this file.
 

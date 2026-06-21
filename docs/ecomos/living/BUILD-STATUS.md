@@ -40,7 +40,8 @@ Phase 1A/1B prerequisite gate.
 - Production docs copied from `ecomos-production-build-kit/repo-overlay/` into active root `AGENTS.md`, `agent-prompts/`, and `docs/ecomos/`.
 - Local OpenClaw CLI installed under `.runtime/openclaw-cli` at exact `2026.6.9`.
 - Gateway smoke passed on loopback token auth, but full runtime conformance is not complete.
-- Docker/Postgres and connector E2E are blocked by host prerequisites and external test-account credentials.
+- Postgres 16.14 is installed and smoke-tested on an alternate local port.
+- Docker/Compose and connector E2E are blocked by host prerequisites and external test-account credentials.
 
 ## Done
 
@@ -51,6 +52,8 @@ Phase 1A/1B prerequisite gate.
 - Installed pinned local OpenClaw `2026.6.9` into gitignored repo-local runtime state.
 - Configured OpenClaw Gateway for loopback port `18789`, token auth at invocation, repo-local state/config, and disabled elevated tool execution.
 - Started Gateway, verified health/status/basic RPC surfaces, and shut it down cleanly.
+- Removed rebuildable ignored caches `ecomos-ui/.next` and `references/dashboard-inspo/node_modules`, increasing free disk from ~`3.3GiB` to ~`5.0GiB` before Postgres 16 installation.
+- Installed Homebrew `postgresql@16` (`16.14`) and smoke-tested it on `127.0.0.1:55432`; stopped the temporary process cleanly.
 
 ## Next
 

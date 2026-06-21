@@ -25,6 +25,16 @@ Metadata only. Never place credentials or refresh tokens here.
   - Warning retained: loopback reverse-proxy/trusted-proxy note, not relevant while Control UI remains local-only
   - State dir permission warning was remediated with `chmod 700`
 
+## Local data services
+
+- PostgreSQL 16: installed via Homebrew `postgresql@16`
+- Version: `PostgreSQL 16.14 (Homebrew)`
+- Default cluster: `/opt/homebrew/var/postgresql@16`
+- Service state: not started persistently by EcomOS
+- Smoke: started manually on `127.0.0.1:55432`, `select version()` returned `PostgreSQL 16.14`, then stopped cleanly
+- Cleanup: `lsof -nP -iTCP:55432 -sTCP:LISTEN` returned no listener
+- Docker/Compose: unavailable on PATH
+
 ## Shopify
 
 - Environment: required `test` development store

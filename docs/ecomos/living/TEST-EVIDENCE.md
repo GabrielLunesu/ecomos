@@ -55,6 +55,28 @@ Record evidence by phase and commit. Do not write “passed” without the exact
   - Runtime directories were reset to chmod `700`.
 - Gate verdict: blocked; see `BLOCKERS.md`.
 
+## Host prerequisite progress
+
+- Commit: recorded before commit creation on `build/production-ecomos`; final response records the resulting commit hash
+- Generated cleanup:
+  - Removed ignored/rebuildable `ecomos-ui/.next` (~`1.2G`)
+  - Removed ignored/rebuildable `references/dashboard-inspo/node_modules` (~`526M`)
+  - `git status --short --ignored` shows these no longer present; tracked source was not modified by cleanup
+- Disk:
+  - After cleanup: `df -h .` reported ~`5.0GiB` free
+  - After `postgresql@16` install: `df -h .` reported ~`4.4GiB` free
+- PostgreSQL 16:
+  - `brew install postgresql@16`: pass
+  - Installed formula: `postgresql@16 16.14`
+  - `/opt/homebrew/opt/postgresql@16/bin/psql --version`: `psql (PostgreSQL) 16.14 (Homebrew)`
+  - Bounded smoke command: `LC_ALL="en_US.UTF-8" /opt/homebrew/opt/postgresql@16/bin/postgres -D /opt/homebrew/var/postgresql@16 -p 55432`
+  - Query: `/opt/homebrew/opt/postgresql@16/bin/psql -h 127.0.0.1 -p 55432 -d postgres -Atc 'select version();'`
+  - Result: `PostgreSQL 16.14 (Homebrew) on aarch64-apple-darwin24.6.0`
+  - Cleanup: temporary server stopped with SIGINT; `lsof -nP -iTCP:55432 -sTCP:LISTEN` returned no listener
+- Container runtime:
+  - `docker`, `colima`, and `podman` remain unavailable on PATH
+- Gate verdict: still blocked for Docker/Compose and dedicated account/runtime credential gates.
+
 ## Phase evidence template
 
 ### Phase X / slice
