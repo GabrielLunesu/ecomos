@@ -169,7 +169,35 @@ Record evidence by phase and commit. Do not write “passed” without the exact
   - Existing campaign budget was discovered, but validate-only create using that budget failed with `CANNOT_USE_IMPLICITLY_SHARED_CAMPAIGN_BUDGET_WITH_MULTIPLE_CAMPAIGNS`.
   - Composio Google Ads tool search for `campaign budget`, `budget`, and `mutate budget` returned zero campaign-budget tools.
   - No campaign create mutation was executed after failed validation.
-- Gate verdict: bounded write cleanup passed for Outlook, Shopify, and Google Ads reversible update/restore. Exact Google Ads campaign create/remove remains blocked by BLOCK-004.
+- Gate verdict: bounded write cleanup passed for Outlook, Shopify, and Google Ads reversible update/restore. Exact Google Ads campaign create/remove needed a budget API path and was completed in the next recorded slice.
+
+## Phase 1B / Google Ads exact create-update-pause-remove cleanup verification
+
+- Commit: recorded before commit creation on `build/production-ecomos`; final response records the resulting commit hash
+- Authorization:
+  - Owner confirmed the current Composio-connected Google Ads resource is safe for bounded test writes with cleanup.
+  - `COMPOSIO_API_KEY` value remained local only and was not printed or committed.
+- Official API reference used:
+  - Composio proxy execution endpoint: `POST /tools/execute/proxy`
+  - Google Ads API `v24` mutate endpoint shape: resource-specific `POST` mutate calls
+  - Google Ads shared budget guidance: new campaign budgets can be created with `explicitly_shared=true`
+- Run marker: `ecomos-ga-create-20260621185831`
+- Commands/results:
+  - Composio proxy `campaignBudgets:mutate` with `validateOnly=true`: HTTP `200`; validate-only budget create passed.
+  - Composio proxy `campaignBudgets:mutate`: HTTP `200`; created tiny explicitly shared disposable campaign budget.
+  - Composio proxy `campaigns:mutate` with `validateOnly=true`: HTTP `200`; validate-only paused Search campaign create passed with the disposable budget.
+  - Composio proxy `campaigns:mutate`: HTTP `200`; created disposable Search campaign in `PAUSED` status.
+  - `GOOGLEADS_SEARCH_STREAM_GAQL`: HTTP `200`, `successful: true`; verified the disposable campaign marker and `PAUSED` status.
+  - Composio proxy `campaigns:mutate` with `validateOnly=true`: HTTP `200`; validate-only update passed.
+  - Composio proxy `campaigns:mutate`: HTTP `200`; updated the campaign name while preserving `PAUSED` status.
+  - `GOOGLEADS_SEARCH_STREAM_GAQL`: HTTP `200`, `successful: true`; verified updated marker and `PAUSED` status.
+  - Composio proxy `campaigns:mutate` remove: HTTP `200`; removed disposable campaign.
+  - Composio proxy `campaignBudgets:mutate` remove: HTTP `200`; removed disposable campaign budget.
+- Cleanup:
+  - Disposable campaign was removed.
+  - Disposable campaign budget was removed.
+  - No enabled campaign or serving-resource mutation was performed.
+- Gate verdict: Phase 1B connector smoke is complete for Outlook, Shopify, and Google Ads bounded test journeys. Phase 1 remains blocked by OpenClaw conformance; see BLOCK-003.
 
 ## Phase evidence template
 

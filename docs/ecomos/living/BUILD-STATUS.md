@@ -2,7 +2,7 @@
 
 ## Current phase
 
-`Phase 1 — Real local OpenClaw and connector smoke environment` is blocked after Phase 0 completion, partial Phase 1A smoke, successful Docker/Compose host setup, Composio connector verification, and bounded write cleanup.
+`Phase 1 — Real local OpenClaw and connector smoke environment` is blocked after Phase 0 completion, partial Phase 1A smoke, successful Docker/Compose host setup, Composio connector verification, and complete Phase 1B bounded connector smoke.
 
 ## Product baseline
 
@@ -45,7 +45,7 @@ Phase 1A/1B prerequisite gate.
 - Composio OAuth/read-only connector verification passed for Outlook, Shopify, and Google Ads.
 - Owner authorized bounded connector test writes against the current Composio-connected resources.
 - Bounded write cleanup passed for Outlook, Shopify, and Google Ads reversible update/restore.
-- Exact Google Ads create/remove campaign gate remains blocked by missing campaign-budget tooling or explicit shared budget.
+- Exact Google Ads create/update/pause/remove cleanup passed after using Composio proxy execution for the missing campaign-budget API path.
 - Full OpenClaw conformance remains blocked by safe non-production model/runtime approval and the MCP harness requirement.
 
 ## Done
@@ -72,8 +72,10 @@ Phase 1A/1B prerequisite gate.
   - Outlook self-send, sent-copy deletion, delayed inbox-copy deletion, final Deleted Items sweep empty.
   - Shopify draft product create, verify, delete, and post-delete `Not Found` confirmation.
   - Google Ads campaign name update/restore on the existing campaign, with validate-only first and final status still `ENABLED`.
-- Attempted stricter Google Ads paused-campaign create/remove validation; blocked before mutation by Composio/Google Ads budget constraints.
+- Attempted stricter Google Ads paused-campaign create/remove validation; initial validation was blocked before mutation by Composio/Google Ads budget constraints.
+- Validated Composio proxy execution for the Google Ads CampaignBudget API path.
+- Ran exact Google Ads bounded lifecycle: explicitly shared disposable budget create, paused disposable Search campaign create, verify paused, validate-only update, update while paused, verify update, remove campaign, remove budget.
 
 ## Next
 
-Owner action is required before the next Phase 1 gate can honestly pass: provide a Google Ads explicit shared test budget or authorize a first-party budget mutation path, and provide safe non-production OpenClaw model/runtime approval. See `BLOCKERS.md`.
+Owner action is required before the next Phase 1 gate can honestly pass: provide safe non-production OpenClaw model/runtime approval so the conformance harness can run tagged agent/session tests after the private MCP echo/read tool exists. See `BLOCKERS.md`.

@@ -71,7 +71,12 @@ Metadata only. Never place credentials or refresh tokens here.
 - Read-only smoke: `GOOGLEADS_LIST_ACCESSIBLE_CUSTOMERS` returned five accessible customer resource names
 - Classification: GAQL classification returned one `ENABLED` customer row with `customer.test_account` not true
 - Write smoke: validate-only campaign name update passed; campaign name was temporarily marked and restored; final status remained `ENABLED`
-- Exact create gate: validate-only paused campaign create failed before mutation because the Composio tool lacks a usable campaign-budget creation/reuse path for the current account
-- Connected: OAuth and bounded update/restore verified
+- Exact create gate: passed through Composio proxy execution for the missing CampaignBudget API path
+  - Created an explicitly shared tiny disposable campaign budget
+  - Created a disposable Search campaign in `PAUSED` status
+  - Verified the campaign stayed `PAUSED`
+  - Validate-only updated the campaign, applied the update while keeping it `PAUSED`, and verified it
+  - Removed the campaign, then removed the disposable campaign budget
+- Connected: OAuth, bounded update/restore, and bounded create/update/pause/remove cleanup verified
 - Serving metrics available: not relied on
-- Last health/E2E: query and reversible update/restore passed; create/remove remains blocked by BLOCK-004
+- Last health/E2E: query, reversible update/restore, and disposable create/update/pause/remove cleanup passed

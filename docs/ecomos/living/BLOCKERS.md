@@ -54,33 +54,37 @@
     - Shopify: created a draft test product, verified it, deleted it, then confirmed a post-delete lookup returned `Not Found`.
     - Google Ads: validated a campaign-name update, appended a temporary marker to an enabled campaign name, verified it, restored the exact original name, and verified the campaign remained `ENABLED`.
   - `TEST-ACCOUNT-RUNBOOK.md` requires dedicated Shopify development store, Microsoft 365 test tenant/mailbox, and Google Ads test manager/client hierarchy.
-- **Why work cannot safely continue:** Resolved for bounded write safety. Exact Google Ads create/remove campaign round trip still needs budget creation/tooling; see BLOCK-004.
+- **Why work cannot safely continue:** Resolved for bounded write safety. Exact Google Ads create/update/pause/remove cleanup passed after using Composio proxy execution for the missing Google Ads CampaignBudget API path.
 - **Options considered:**
   - Treat active OAuth as sufficient: rejected because the spec requires safe dedicated test accounts and read/write round trips.
   - Run writes/sends after explicit owner authorization and clean up: accepted.
 - **Recommended option:** Keep using unique `ECOMOS TEST` markers and immediate cleanup/restoration for connector smoke until dedicated test resources are connected.
 - **Exact owner action/value required:** None for bounded write safety.
-- **Resume command/step:** Continue Phase 1B with the remaining exact Google Ads campaign-create blocker and Phase 1A OpenClaw conformance.
+- **Resume command/step:** Continue with Phase 1A OpenClaw conformance.
 - **Secrets note:** do not paste tokens, client secrets, OAuth codes, cookies, or refresh tokens into this file.
 
-### BLOCK-004 — Google Ads exact create/update/pause/remove round trip needs campaign-budget tooling
+### BLOCK-004 — RESOLVED: Google Ads exact create/update/pause/remove round trip needed campaign-budget tooling
 
 - **Phase/slice:** Phase 1B Google Ads connector write E2E
 - **Detected at:** 2026-06-21 during bounded write smoke
-- **Current safe state/commit:** Google Ads reversible update/restore passed; attempted campaign-create validations did not mutate provider state
+- **Resolved at:** 2026-06-21 after Composio proxy execution was validated against the Google Ads CampaignBudget API
+- **Current safe state/commit:** Google Ads reversible update/restore passed; exact create/update/pause/remove lifecycle passed; disposable campaign and disposable campaign budget were removed
 - **Evidence:**
   - `GOOGLEADS_MUTATE_CAMPAIGNS` validate-only create with `daily_budget` failed before mutation because the Composio tool emitted an unsupported `dailyBudget` payload field.
   - Existing campaign budget discovery succeeded, but validate-only create using that `campaign_budget` failed with `CANNOT_USE_IMPLICITLY_SHARED_CAMPAIGN_BUDGET_WITH_MULTIPLE_CAMPAIGNS`.
   - Composio Google Ads tool search for `campaign budget`, `budget`, and `mutate budget` returned zero campaign-budget tools.
   - Reversible Google Ads update/restore smoke passed by temporarily changing a campaign name and restoring it.
-- **Why work cannot safely continue:** The documented Phase 1B Google Ads gate asks for query/create/update/pause round trip. Query and reversible update are proven, but creating a disposable campaign requires either an explicit shared budget, a campaign-budget creation tool, or a first-party Google Ads adapter path.
+  - Composio proxy execution was available for the connected Google Ads account and validate-only `campaignBudgets:mutate` passed against Google Ads API `v24`.
+  - Bounded lifecycle run `ecomos-ga-create-20260621185831` created an explicitly shared tiny disposable campaign budget, created a paused disposable Search campaign attached to it, verified the campaign was `PAUSED`, validate-only updated it, applied the update while keeping it `PAUSED`, verified the update, removed the campaign, then removed the disposable budget.
+- **Why work cannot safely continue:** Resolved for Phase 1B. Phase 1 still cannot pass because BLOCK-003 remains.
 - **Options considered:**
   - Reuse implicitly shared existing budget: rejected by Google Ads validate-only error.
   - Claim reversible update/restore as full create coverage: rejected because it does not prove create/remove.
   - Record bounded write progress and keep exact create gate blocked: accepted.
-- **Recommended option:** Provide/connect a Google Ads test customer with an explicit shared campaign budget available for disposable paused campaign creation, or implement the first-party Google Ads adapter/budget creation path before rerunning the exact create/remove gate.
-- **Exact owner action/value required:** Confirm an explicit shared test campaign budget resource is available, or authorize building the first-party campaign-budget mutation path before the full Google Ads create gate.
-- **Resume command/step:** Re-run validate-only campaign create with an explicit shared budget, then create a paused test campaign and remove it immediately.
+  - Use Composio proxy execution only for the missing CampaignBudget endpoint while keeping OAuth credentials server-side in Composio: accepted after validate-only success.
+- **Recommended option:** Use first-party adapter code for production slices; keep proxy execution as Phase 1 evidence only.
+- **Exact owner action/value required:** None for this blocker.
+- **Resume command/step:** Continue with Phase 1A OpenClaw conformance.
 - **Secrets note:** do not paste Google Ads tokens, refresh tokens, developer tokens, or customer IDs into this file.
 
 ### BLOCK-003 — Full OpenClaw conformance needs safe model/runtime credentials and MCP harness
