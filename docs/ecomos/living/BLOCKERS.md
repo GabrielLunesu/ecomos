@@ -8,7 +8,11 @@
 - **Evidence:**
   - `docker --version`: `command not found`
   - `docker compose version`: `command not found`
-  - `df -h .`: workspace volume still ~`98%` used, ~`4.4GiB` free after cache cleanup and Postgres 16 install
+  - `command -v colima`: no result
+  - `command -v podman`: no result
+  - `/Applications/Docker.app`: not present
+  - `df -h /`: host root volume still has only ~`4.6GiB` free after cache cleanup and Postgres 16 install
+  - `brew cleanup -n`: would free only ~`174.2MB`, not enough to make Docker/VM startup safe
   - Rebuildable ignored caches removed: `ecomos-ui/.next`, `references/dashboard-inspo/node_modules`
   - `postgresql@16` installed: `/opt/homebrew/opt/postgresql@16/bin/psql --version` -> `psql (PostgreSQL) 16.14 (Homebrew)`
   - Bounded Postgres 16 smoke: `/opt/homebrew/opt/postgresql@16/bin/psql -h 127.0.0.1 -p 55432 -d postgres -Atc 'select version();'` returned `PostgreSQL 16.14`; temporary server stopped and port `55432` is free
@@ -19,7 +23,7 @@
   - Install Docker/Colima now: rejected because Docker is absent and available disk is too low for a safe VM/image setup.
   - Use local Postgres 16 only: accepted as partial prerequisite progress, but not sufficient for the documented Docker topology gate.
 - **Recommended option:** Free at least 10-15 GiB and install Docker Desktop/CLI with Compose or an approved Colima/Docker CLI stack.
-- **Exact owner action/value required:** Confirm Docker is installed and available on PATH, or approve/provide a safe container-runtime setup after freeing disk.
+- **Exact owner action/value required:** Free at least 10-15 GiB, then confirm Docker is installed and available on PATH, or approve/provide a safe Colima/Docker CLI setup.
 - **Resume command/step:** Re-run `docker --version`, `docker compose version`, then continue Phase 2 platform topology setup.
 - **Secrets note:** do not paste a database password into this file.
 

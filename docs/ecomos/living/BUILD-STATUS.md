@@ -54,6 +54,7 @@ Phase 1A/1B prerequisite gate.
 - Started Gateway, verified health/status/basic RPC surfaces, and shut it down cleanly.
 - Removed rebuildable ignored caches `ecomos-ui/.next` and `references/dashboard-inspo/node_modules`, increasing free disk from ~`3.3GiB` to ~`5.0GiB` before Postgres 16 installation.
 - Installed Homebrew `postgresql@16` (`16.14`) and smoke-tested it on `127.0.0.1:55432`; stopped the temporary process cleanly.
+- Rechecked Docker/Compose/Colima/Podman and Docker Desktop: none are available; `brew cleanup -n` would free only ~`174.2MB`, leaving disk too constrained for a safe container VM/image setup.
 
 ## Next
 

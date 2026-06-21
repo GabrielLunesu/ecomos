@@ -74,7 +74,13 @@ Record evidence by phase and commit. Do not write “passed” without the exact
   - Result: `PostgreSQL 16.14 (Homebrew) on aarch64-apple-darwin24.6.0`
   - Cleanup: temporary server stopped with SIGINT; `lsof -nP -iTCP:55432 -sTCP:LISTEN` returned no listener
 - Container runtime:
-  - `docker`, `colima`, and `podman` remain unavailable on PATH
+  - `docker --version`: `zsh:1: command not found: docker`
+  - `docker compose version`: `zsh:1: command not found: docker`
+  - `command -v colima`: no result
+  - `command -v podman`: no result
+  - `ls -d /Applications/Docker.app`: no Docker Desktop app at that path
+  - `brew cleanup -n`: would free approximately `174.2MB`
+  - `df -h /`: ~`4.6GiB` free
 - Gate verdict: still blocked for Docker/Compose and dedicated account/runtime credential gates.
 
 ## Phase evidence template
