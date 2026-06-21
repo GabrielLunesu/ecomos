@@ -2,7 +2,7 @@
 
 ## Current phase
 
-`Phase 1 — Real local OpenClaw and connector smoke environment` is blocked after Phase 0 completion, partial Phase 1A smoke, and successful Docker/Compose host setup.
+`Phase 1 — Real local OpenClaw and connector smoke environment` is blocked after Phase 0 completion, partial Phase 1A smoke, successful Docker/Compose host setup, and Composio read-only connector verification.
 
 ## Product baseline
 
@@ -41,7 +41,10 @@ Phase 1A/1B prerequisite gate.
 - Local OpenClaw CLI installed under `.runtime/openclaw-cli` at exact `2026.6.9`.
 - Gateway smoke passed on loopback token auth, but full runtime conformance is not complete.
 - Postgres 16.14 is installed and smoke-tested on an alternate local port.
-- Docker/Compose host prerequisites are resolved with Colima. Connector E2E and full OpenClaw conformance remain blocked by external test-account/runtime credentials and the MCP harness requirement.
+- Docker/Compose host prerequisites are resolved with Colima.
+- Composio OAuth/read-only connector verification passed for Outlook, Shopify, and Google Ads.
+- Connector write/send E2E remains blocked by live-account risk: Shopify is not classified as a partner development shop and Google Ads returned an enabled non-test customer row.
+- Full OpenClaw conformance remains blocked by safe non-production model/runtime approval and the MCP harness requirement.
 
 ## Done
 
@@ -59,7 +62,11 @@ Phase 1A/1B prerequisite gate.
 - Configured Docker Compose plugin discovery in `~/.docker/config.json`.
 - Started Colima with `2` CPUs, `4GiB` memory, `20GiB` disk, Docker runtime, and context `colima`.
 - Verified Docker daemon and Compose with `docker info`, `docker compose version`, and `docker run --rm hello-world`.
+- Found `COMPOSIO_API_KEY` in ignored `ecomos-ui/.env.local` without printing the value.
+- Verified Composio Connected Accounts API returned active OAuth accounts for Outlook, Shopify, and Google Ads.
+- Ran read-only Composio tools successfully: Outlook profile, Shopify paginated product read, and Google Ads accessible customers.
+- Ran read-only environment classification: Shopify returned `partnerDevelopment: false`; Google Ads returned an `ENABLED` customer row that was not marked as a test account.
 
 ## Next
 
-Owner action is required before the next Phase 1 gate can honestly pass: dedicated connector test accounts/OAuth values and safe non-production OpenClaw model/runtime approval. See `BLOCKERS.md`.
+Owner action is required before the next Phase 1 gate can honestly pass: reconnect/confirm safe dedicated connector test resources for write E2E and provide safe non-production OpenClaw model/runtime approval. See `BLOCKERS.md`.

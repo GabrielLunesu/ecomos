@@ -6,7 +6,7 @@
 | Agent action duplicates | Medium | Critical | Action ledger, idempotency, reconciliation | Not implemented |
 | OAuth token loss/leak | Medium | Critical | Encryption, write-only APIs, rotation, redaction | Not implemented |
 | UI/backend contract drift | Medium | High | Shared schemas + vertical slices | UI contract exists |
-| Test environment accidentally live | Low/Medium | Critical | Environment classification + hard write block | Runbook defined |
+| Test environment accidentally live | High | Critical | Environment classification + hard write block | Composio OAuth/read-only calls passed, but Shopify classification returned `partnerDevelopment: false` and Google Ads returned an `ENABLED` non-test customer row; no writes were attempted |
 | Local machine resource exhaustion | Medium | High | One lead, max 3 subagents, staged checks; keep Colima bounded and stop it when idle | Host has 8 GB RAM, Apple M1; after owner-side disk cleanup and Colima start, `df -h /` reports ~21 GiB free; Colima configured with 2 CPUs, 4 GiB memory, 20 GiB disk |
 | Incomplete backup (DB without OpenClaw) | Medium | High | Unified backup/restore drill | Spec defined |
 | Prompt injection reaches broad tools | Medium | Critical | Private MCP, narrow grants, deterministic action pipeline | Not implemented |

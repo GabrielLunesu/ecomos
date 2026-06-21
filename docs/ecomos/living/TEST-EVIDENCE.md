@@ -109,6 +109,32 @@ Record evidence by phase and commit. Do not write “passed” without the exact
   - Result: Docker pulled `hello-world:latest` for `arm64v8`, created the container, streamed `Hello from Docker!`, and removed the container
 - Gate verdict: Docker/Compose host prerequisite resolved; Phase 1 remains blocked for dedicated connector accounts/OAuth and safe OpenClaw model/runtime conformance.
 
+## Phase 1B / Composio connector OAuth read-only verification
+
+- Commit: recorded before commit creation on `build/production-ecomos`; final response records the resulting commit hash
+- Secret handling:
+  - `ecomos-ui/.env.local` contains `COMPOSIO_API_KEY`
+  - The key value was not printed, committed, or copied into Markdown
+- Official API reference used:
+  - Composio API base: `https://backend.composio.dev/api/v3.1`
+  - Auth header: `x-api-key`
+  - Connected accounts endpoint: `GET /connected_accounts`
+  - Tool execution endpoint: `POST /tools/execute/{tool_slug}`
+- Connected account status:
+  - `GET /connected_accounts?limit=100&account_type=ALL`: HTTP `200`
+  - Active OAuth2 accounts found for `outlook`, `shopify`, and `googleads`
+  - One expired older Shopify initiation was also present and ignored
+- Read-only tool execution:
+  - Outlook `OUTLOOK_GET_PROFILE` with `user_id=me`: HTTP `200`, `successful: true`, returned profile-shaped data
+  - Shopify `SHOPIFY_GET_PRODUCTS_PAGINATED` with `limit=1` and narrow fields: HTTP `200`, `successful: true`, returned one product page and pagination metadata
+  - Google Ads `GOOGLEADS_LIST_ACCESSIBLE_CUSTOMERS`: HTTP `200`, `successful: true`, returned five accessible customer resource names
+- Read-only classification:
+  - Shopify `SHOPIFY_GRAPH_QL_QUERY` for shop plan classification: HTTP `200`, `successful: true`, `partnerDevelopment: false`
+  - Google Ads `GOOGLEADS_SEARCH_STREAM_GAQL` for `customer.test_account`, `customer.manager`, `customer.status`: HTTP `200`, `successful: true`, one row returned, status `ENABLED`, not a test account
+- Writes/sends:
+  - No Outlook send/reply, Shopify create/update, or Google Ads mutate call was attempted
+- Gate verdict: OAuth/read-only connector auth is verified; Phase 1B write/send E2E remains blocked by live-account risk and missing explicit dedicated-test-resource confirmation.
+
 ## Phase evidence template
 
 ### Phase X / slice

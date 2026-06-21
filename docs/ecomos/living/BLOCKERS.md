@@ -32,25 +32,33 @@
 - **Resume command/step:** Continue with connector/test-account and OpenClaw conformance prerequisites.
 - **Secrets note:** do not paste a database password into this file.
 
-### BLOCK-002 — Dedicated connector test accounts and OAuth credentials are required
+### BLOCK-002 — Provider OAuth works, but dedicated test-account/write safety is not proven
 
 - **Phase/slice:** Phase 1B test connector accounts
-- **Detected at:** 2026-06-21 before any provider connection attempt
-- **Current safe state/commit:** No Shopify, Microsoft, or Google Ads account has been connected; no provider write attempted
+- **Detected at:** 2026-06-21 before any provider write/send attempt
+- **Current safe state/commit:** Composio OAuth connections are active for Outlook, Shopify, and Google Ads; read-only Composio tool calls passed; no provider write/send/update/delete was attempted
 - **Evidence:**
+  - `ecomos-ui/.env.local` contains `COMPOSIO_API_KEY` (value not printed or documented).
+  - Composio Connected Accounts API returned active OAuth accounts for `outlook`, `shopify`, and `googleads` under a `pg-test-*` Composio user ID.
+  - Read-only Composio tool execution passed:
+    - Outlook: `OUTLOOK_GET_PROFILE` returned profile-shaped data.
+    - Shopify: `SHOPIFY_GET_PRODUCTS_PAGINATED` returned one product page and pagination metadata.
+    - Google Ads: `GOOGLEADS_LIST_ACCESSIBLE_CUSTOMERS` returned five accessible customer resource names.
+  - Read-only classification checks did not prove safe test environments:
+    - Shopify GraphQL shop classification returned `partnerDevelopment: false`.
+    - Google Ads GAQL classification returned one `ENABLED` customer row with `customer.test_account` not true.
   - `TEST-ACCOUNT-RUNBOOK.md` requires dedicated Shopify development store, Microsoft 365 test tenant/mailbox, and Google Ads test manager/client hierarchy.
-  - `INTEGRATION-STATE.md` records all three providers as disconnected.
-- **Why work cannot safely continue:** OAuth consent, account creation, developer tokens, client secrets, callback configuration, and test-environment verification are explicit stop-and-ping gates. Connecting an unknown account risks live-store, live-mailbox, billable, or customer-facing side effects.
+- **Why work cannot safely continue:** OAuth connectivity is now proven, but Phase 1B write/send E2E would create live-account risk unless the connected Shopify and Google Ads resources are replaced with dedicated test resources or explicitly authorized for bounded non-production testing. Outlook is read-authenticated, but send/reply E2E still requires a confirmed dedicated test recipient/mailbox policy.
 - **Options considered:**
-  - Use any local/browser account found on the machine: rejected as live-account risk.
-  - Build fake connectors only: rejected because Phase 1B gate explicitly requires real sandbox connectivity.
-  - Stop and request dedicated test metadata/credentials: accepted.
-- **Recommended option:** Create/confirm dedicated test accounts and provide credentials through a safe local secret mechanism, not Markdown.
+  - Treat active OAuth as sufficient: rejected because the spec requires safe dedicated test accounts and read/write round trips.
+  - Run writes/sends against the connected accounts: rejected because Shopify and Google Ads classification evidence indicates live-account risk.
+  - Record OAuth/read-only progress and request safe test-account correction/authorization: accepted.
+- **Recommended option:** Reconnect Composio to dedicated test resources, or explicitly confirm the current connected resources are safe for bounded writes despite the classification results.
 - **Exact owner action/value required:**
-  - Shopify: development store identifier, app/custom app credentials, approved localhost callback/webhook setup, and confirmation the store cannot process real transactions.
-  - Microsoft: test tenant/mailbox IDs, Entra app registration, localhost redirect URI, delegated OAuth consent for `offline_access`, identity basics, `Mail.ReadWrite`, and `Mail.Send`.
-  - Google Ads: test manager/client customer IDs, OAuth client, developer token with test-account access, and confirmation no billing/production hierarchy is connected.
-- **Resume command/step:** Populate the local uncommitted secret mechanism requested by the implementation, then run the Phase 1B connector smoke suite serially.
+  - Shopify: connect a Shopify development store where `partnerDevelopment`/store classification proves non-production, or explicitly authorize bounded test writes to the current connected shop.
+  - Microsoft: confirm the Outlook account is a dedicated test mailbox and provide/approve a test recipient address for send/reply round trip.
+  - Google Ads: connect a Google Ads test manager/client hierarchy where GAQL reports `customer.test_account = true`, or explicitly authorize bounded mutations to the current connected customer despite `ENABLED`/non-test classification.
+- **Resume command/step:** Re-run the Composio connected-account/read-only classification probe, then run the Phase 1B connector smoke suite serially only against resources confirmed safe for writes.
 - **Secrets note:** do not paste tokens, client secrets, OAuth codes, cookies, or refresh tokens into this file.
 
 ### BLOCK-003 — Full OpenClaw conformance needs safe model/runtime credentials and MCP harness
