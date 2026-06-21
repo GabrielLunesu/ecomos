@@ -33,7 +33,13 @@ Metadata only. Never place credentials or refresh tokens here.
 - Service state: not started persistently by EcomOS
 - Smoke: started manually on `127.0.0.1:55432`, `select version()` returned `PostgreSQL 16.14`, then stopped cleanly
 - Cleanup: `lsof -nP -iTCP:55432 -sTCP:LISTEN` returned no listener
-- Docker/Compose: unavailable on PATH
+- Docker/Compose: available through Homebrew Docker CLI, Compose plugin, and Colima
+- Docker client: `Docker version 29.6.0`
+- Docker server: Colima context `colima`, Docker server `29.5.2`
+- Docker Compose: `Docker Compose version 5.1.4`
+- Colima: `0.10.3`, running with macOS Virtualization.Framework, Docker runtime, `2` CPUs, `4GiB` memory, `20GiB` disk
+- Docker socket: `unix:///Users/gabriellunesu/.colima/default/docker.sock`
+- Smoke: `docker run --rm hello-world` passed and removed its container
 
 ## Shopify
 

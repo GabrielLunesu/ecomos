@@ -2,7 +2,7 @@
 
 ## Current phase
 
-`Phase 1 — Real local OpenClaw and connector smoke environment` is blocked after Phase 0 completion and partial Phase 1A smoke.
+`Phase 1 — Real local OpenClaw and connector smoke environment` is blocked after Phase 0 completion, partial Phase 1A smoke, and successful Docker/Compose host setup.
 
 ## Product baseline
 
@@ -41,7 +41,7 @@ Phase 1A/1B prerequisite gate.
 - Local OpenClaw CLI installed under `.runtime/openclaw-cli` at exact `2026.6.9`.
 - Gateway smoke passed on loopback token auth, but full runtime conformance is not complete.
 - Postgres 16.14 is installed and smoke-tested on an alternate local port.
-- Docker/Compose and connector E2E are blocked by host prerequisites and external test-account credentials.
+- Docker/Compose host prerequisites are resolved with Colima. Connector E2E and full OpenClaw conformance remain blocked by external test-account/runtime credentials and the MCP harness requirement.
 
 ## Done
 
@@ -55,7 +55,11 @@ Phase 1A/1B prerequisite gate.
 - Removed rebuildable ignored caches `ecomos-ui/.next` and `references/dashboard-inspo/node_modules`, increasing free disk from ~`3.3GiB` to ~`5.0GiB` before Postgres 16 installation.
 - Installed Homebrew `postgresql@16` (`16.14`) and smoke-tested it on `127.0.0.1:55432`; stopped the temporary process cleanly.
 - Rechecked Docker/Compose/Colima/Podman and Docker Desktop: none are available; `brew cleanup -n` would free only ~`174.2MB`, leaving disk too constrained for a safe container VM/image setup.
+- After owner authorized install and disk was freed to ~`24GiB`, installed Homebrew Docker `29.6.0`, Docker Compose `5.1.4`, Lima `2.1.3`, and Colima `0.10.3`.
+- Configured Docker Compose plugin discovery in `~/.docker/config.json`.
+- Started Colima with `2` CPUs, `4GiB` memory, `20GiB` disk, Docker runtime, and context `colima`.
+- Verified Docker daemon and Compose with `docker info`, `docker compose version`, and `docker run --rm hello-world`.
 
 ## Next
 
-Owner action is required before the next phase gate can honestly pass. See `BLOCKERS.md`.
+Owner action is required before the next Phase 1 gate can honestly pass: dedicated connector test accounts/OAuth values and safe non-production OpenClaw model/runtime approval. See `BLOCKERS.md`.

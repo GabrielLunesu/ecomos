@@ -1,30 +1,35 @@
 # Blockers
 
-### BLOCK-001 — Host prerequisites block Docker/Compose and full local platform gate
+### BLOCK-001 — RESOLVED: Host prerequisites blocked Docker/Compose and full local platform gate
 
 - **Phase/slice:** Phase 1A/2 local runtime and platform skeleton
 - **Detected at:** 2026-06-21 during Phase 0/1 inventory
-- **Current safe state/commit:** Branch `build/production-ecomos`; Gateway stopped; port `18789` free; local OpenClaw state remains under gitignored `.runtime/`
+- **Resolved at:** 2026-06-21 after owner authorized install and disk was freed
+- **Current safe state/commit:** Branch `build/production-ecomos`; Colima is running with Docker context `colima`; Gateway stopped; port `18789` free; local OpenClaw state remains under gitignored `.runtime/`
 - **Evidence:**
-  - `docker --version`: `command not found`
-  - `docker compose version`: `command not found`
-  - `command -v colima`: no result
-  - `command -v podman`: no result
-  - `/Applications/Docker.app`: not present
-  - `df -h /`: host root volume still has only ~`4.6GiB` free after cache cleanup and Postgres 16 install
-  - `brew cleanup -n`: would free only ~`174.2MB`, not enough to make Docker/VM startup safe
+  - Before resolution, `docker`, Docker Compose, Colima, and Podman were unavailable.
+  - Before resolution, free disk was too low for a safe VM/container stack.
+  - `df -h /` before install: ~`24GiB` free after owner-side disk cleanup.
+  - `brew install docker docker-compose colima`: installed Docker `29.6.0`, Docker Compose `5.1.4`, Lima `2.1.3`, and Colima `0.10.3`.
+  - `~/.docker/config.json` configured `cliPluginsExtraDirs` for `/opt/homebrew/lib/docker/cli-plugins`.
+  - `docker --version`: `Docker version 29.6.0`
+  - `docker compose version`: `Docker Compose version 5.1.4`
+  - `colima start --cpu 2 --memory 4 --disk 20 --runtime docker`: completed and selected Docker context `colima`.
+  - `docker info`: Docker daemon reachable, context `colima`, server `29.5.2`, `2` CPUs, ~`4GiB` memory.
+  - `docker run --rm hello-world`: passed; Docker pulled and ran the `arm64v8` hello-world image, then removed the container.
+  - `df -h /` after install/start: ~`21GiB` free.
   - Rebuildable ignored caches removed: `ecomos-ui/.next`, `references/dashboard-inspo/node_modules`
   - `postgresql@16` installed: `/opt/homebrew/opt/postgresql@16/bin/psql --version` -> `psql (PostgreSQL) 16.14 (Homebrew)`
   - Bounded Postgres 16 smoke: `/opt/homebrew/opt/postgresql@16/bin/psql -h 127.0.0.1 -p 55432 -d postgres -Atc 'select version();'` returned `PostgreSQL 16.14`; temporary server stopped and port `55432` is free
   - Host: macOS `15.3.1`, Apple M1, 8 GB RAM
-- **Why work cannot safely continue:** Phase 2 requires a Docker development topology and enough disk to run images/services reliably. Postgres 16 is now available locally, but Docker/Compose are still unavailable and free disk remains below the safe threshold for a VM/container stack.
+- **Why work cannot safely continue:** Resolved for Docker/Compose. Phase 1 still cannot pass because BLOCK-002 and BLOCK-003 remain.
 - **Options considered:**
   - Continue without Docker/Compose: rejected because topology/restart tests would be fake.
-  - Install Docker/Colima now: rejected because Docker is absent and available disk is too low for a safe VM/image setup.
+  - Install Docker/Colima after disk was freed: accepted.
   - Use local Postgres 16 only: accepted as partial prerequisite progress, but not sufficient for the documented Docker topology gate.
-- **Recommended option:** Free at least 10-15 GiB and install Docker Desktop/CLI with Compose or an approved Colima/Docker CLI stack.
-- **Exact owner action/value required:** Free at least 10-15 GiB, then confirm Docker is installed and available on PATH, or approve/provide a safe Colima/Docker CLI setup.
-- **Resume command/step:** Re-run `docker --version`, `docker compose version`, then continue Phase 2 platform topology setup.
+- **Recommended option:** Keep Colima available for local development with `colima start` when needed and `colima stop` when finished.
+- **Exact owner action/value required:** None for Docker/Compose.
+- **Resume command/step:** Continue with connector/test-account and OpenClaw conformance prerequisites.
 - **Secrets note:** do not paste a database password into this file.
 
 ### BLOCK-002 — Dedicated connector test accounts and OAuth credentials are required

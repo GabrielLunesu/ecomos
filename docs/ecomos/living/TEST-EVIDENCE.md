@@ -83,6 +83,32 @@ Record evidence by phase and commit. Do not write “passed” without the exact
   - `df -h /`: ~`4.6GiB` free
 - Gate verdict: still blocked for Docker/Compose and dedicated account/runtime credential gates.
 
+## Host container runtime completion
+
+- Commit: recorded before commit creation on `build/production-ecomos`; final response records the resulting commit hash
+- Trigger: owner instructed to proceed with install after previous host blocker
+- Disk:
+  - Before install: `df -h /` reported ~`24GiB` free
+  - After Colima start: `df -h /` reported ~`21GiB` free
+- Install:
+  - `brew install docker docker-compose colima`: pass
+  - Installed Docker CLI: `29.6.0`
+  - Installed Docker Compose plugin: `5.1.4`
+  - Installed Lima: `2.1.3`
+  - Installed Colima: `0.10.3`
+- Configuration:
+  - Created `~/.docker/config.json` with `cliPluginsExtraDirs` pointing to `/opt/homebrew/lib/docker/cli-plugins`
+  - `docker compose version`: `Docker Compose version 5.1.4`
+- Colima:
+  - `colima start --cpu 2 --memory 4 --disk 20 --runtime docker`: pass
+  - `docker context ls`: current context `colima`, endpoint `unix:///Users/gabriellunesu/.colima/default/docker.sock`
+  - `colima status`: running with macOS Virtualization.Framework, architecture `aarch64`, runtime `docker`, mount type `virtiofs`
+  - `docker info`: daemon reachable, server `29.5.2`, `2` CPUs, ~`4GiB` memory, architecture `aarch64`, Compose plugin loaded
+- Container smoke:
+  - `docker run --rm hello-world`: pass
+  - Result: Docker pulled `hello-world:latest` for `arm64v8`, created the container, streamed `Hello from Docker!`, and removed the container
+- Gate verdict: Docker/Compose host prerequisite resolved; Phase 1 remains blocked for dedicated connector accounts/OAuth and safe OpenClaw model/runtime conformance.
+
 ## Phase evidence template
 
 ### Phase X / slice
